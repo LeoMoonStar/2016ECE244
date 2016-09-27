@@ -1,0 +1,72 @@
+/* 
+ * File:   main.cpp
+ * Author: yangjiaw
+ *
+ * Created on September 27, 2016, 12:12 PM
+ */
+
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <string>
+
+#define MAX_NODE_NUMBER 5000;
+using namespace std;
+bool errorCheckByCommand(string command);
+void errorMessagePrint();
+void insertFunction(string line);
+enum errorType{ic,ia,nr,nob,rnba,brcn,tma,tfa};
+//enum commandType{};
+
+
+/*
+ * 
+ */
+int main(int argc, char** argv) {
+    string line,command,name,argument5='value';
+    int nodeid1,nodeid2;
+    double resistance;
+    errorType v;
+    cout << "> ";
+    getline(cin,line);
+    while(!cin.eof()){
+        stringstream lineStream(line);
+        lineStream >> command;
+        cout << command;
+        if(errorCheckByCommand(command)==false)
+            v=ic;
+        else
+        {
+            if(command="insertR")
+                insertFunction(line);
+            else if(command="modifyR")
+                modifyFunction(line);
+            else if(command="printR")
+                printFunction(line);
+            else if(command="printNode")
+                printNodeFunction(line);
+            else if(command="deleteR")
+                deleteFunction(line);
+        }
+            
+        }
+
+   
+    
+    
+    
+    
+    return 0;
+}
+
+bool errorCheckByCommand(string command){
+    if((command=='insertR')||(command=='modifyR')||(command=='printR')||(command=='printNode')||(command=='deleteR'))
+        return true;
+    else
+        return false;    
+}
+
+
+void errorMessagePrint(){
+    
+}
