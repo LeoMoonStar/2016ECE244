@@ -11,127 +11,294 @@ void deleteFunction(string line);
 int numberOfWords(string line);
 
 int main() {
-	string line, command;
-	cout << ">";
-	getline(cin, line);
-	while (!cin.eof()) {
-		stringstream ss(line);
-		ss >> command;
-		if (command == "insertR")
-			insert(line);
-		else if (command == "modifyR")
-			modify(line);
-		else if (command == "printR")
-			print(line);
-		else if (command == "printNode")
-			printNode(line);
-		else if (command == "deleteR")
-			deleteFunction(line);
-		else
-			cout << "Error: invalid command" << endl;
-		cout << ">";
-		getline(cin, line);
-	}
-	return 0;
+    string line, command;
+    cout << ">";
+    getline(cin, line);
+    while (!cin.eof()) {
+        stringstream ss(line);
+        ss >> command;
+        if (command == "insertR")
+            insert(line);
+        else if (command == "modifyR")
+            modify(line);
+        else if (command == "printR")
+            print(line);
+        else if (command == "printNode")
+            printNode(line);
+        else if (command == "deleteR")
+            deleteFunction(line);
+        else
+            cout << "Error: invalid command" << endl;
+        cout << ">";
+        getline(cin, line);
+    }
+    return 0;
 }
-
 
 void insert(string line) {
-	string command, name;
-	double resistance;
-	int nodeid1, nodeid2;
-	if (numberOfWords(line) == 1)
-		cout << "Error: too few arguments" << endl;
-        if(numberOfWords(line)==2){
-            stringstream ss(line);
-            ss>>command>>name;
-            if(name=="all")
-                cout<<"Error: resistor name cannot be the keyword \"all\""<<endl;
-            else
-                cout << "Error: too few arguments" << endl;
+    string command, name;
+    double resistance;
+    int nodeid1, nodeid2;
+    if (numberOfWords(line) == 1)
+        cout << "Error: too few arguments" << endl;
+    if (numberOfWords(line) == 2) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else
+            cout << "Error: too few arguments" << endl;
+    }
+    if (numberOfWords(line) == 3) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else {
+            ss >> command >> name >> resistance;
+            if (!ss.fail()) {
+                if (resistance < 0)
+                    cout << "Error: negative resistance" << endl;
+                else
+                    cout << "Error: too few arguments" << endl;
+            } else {
+                cout << "Error: invalid argument" << endl;
+                ss.clear();
+            }
         }
-	if (numberOfWords(line) == 3) {
-		stringstream ss(line);
-		ss>>command>>name;
-                if(name=="all")
-                    cout<<"Error: resistor name cannot be the keyword \"all\""<<endl;
-                else{
-                    ss >> command >> name >> resistance;
-		if (!ss.fail()) {
-			if (resistance < 0)
-				cout << "Error: negative resistance" << endl;
-			else
-				cout << "Error: too few arguments" << endl;
-		}
-		else {
-			cout << "Error: invalid argument" << endl;
-			ss.clear();
-		}
-                }
+    }
+    if (numberOfWords(line) == 4) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all") {
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        } else {
+            ss >> command >> name >> resistance;
+            if (!ss.fail()) {
+                ss.clear();
+                ss >> nodeid1;
+                if (!ss.fail()) {
+                    if (!(0 <= nodeid1 <= 5000))
+                        cout << "Error: node " << nodeid1 << " is out of permitted range 0-5000" << endl;
+                    else
+                        cout << "Error: too few arguments" << endl;
+                } else
+                    cout << "Error: invalid argument" << endl;
+            }
         }
-	if (numberOfWords(line) == 4) {
-		stringstream ss(line);
-		ss >> command >> name >> resistance;
-		if (!ss.fail()) {
-			ss.clear();
-			ss >> nodeid1;
-			if (!ss.fail()) {
-				if (!(0 <= nodeid1 <= 5000))
-					cout << "Error: node " << nodeid1 << " is out of permitted range 0-5000" << endl;
-				else
-					cout << "Error: too few arguments" << endl;
-			}
-			else 
-				cout << "Error: invalid argument" << endl;
-		}
-	}
-	if (numberOfWords(line) == 5) {
-		stringstream ss(line);
-		ss >> command >> name >> resistance;
-		if (!ss.fail()) {
-                    ss.clear();
+    }
+    if (numberOfWords(line) == 5) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else {
+            ss >> command >> name >> resistance;
+            if (!ss.fail()) {
+                ss.clear();
+                if (resistance < 0)
+                    cout << "Error: negative resistance" << endl;
+                else {
                     ss>>nodeid1;
-                    if(!ss.fail()){
+                    if (!ss.fail()) {
                         ss.clear();
                         ss>>nodeid2;
-                        if(!ss.fail()){
-                            if(nodeid1!=nodeid2)
-                            {
-                                cout<<"Inserted: resistor "<<name<<" "<<resistance<<" 0hms "
-                                        <<nodeid1<<" -> "<<nodeid2<<endl;
-                            }
-                            else 
-                                cout<<"Error: both terminals of resistor connect to node "<<nodeid1;
-                                    
-                        }
-                        else
+                        if (!ss.fail()) {
+                            ss.clear();
+                            if (nodeid1 != nodeid2) {
+                                cout << "Inserted: resistor " << name << " " << resistance << " 0hms "
+                                        << nodeid1 << " -> " << nodeid2 << endl;
+                            } else
+                                cout << "Error: both terminals of resistor connect to node " << nodeid1;
+                        } else
                             cout << "Error: invalid argument" << endl;
-                    }
+                    } else
+                        cout << "Error: invalid argument" << endl;
 
-		}
-	}
+                }
+            }
+        }
+    }
+    if (numberOfWords(line) > 5) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else {
+            ss >> command >> name >> resistance;
+            if (!ss.fail()) {
+                ss.clear();
+                if (resistance < 0)
+                    cout << "Error: negative resistance" << endl;
+                else {
+                    ss>>nodeid1;
+                    if (!ss.fail()) {
+                        ss.clear();
+                        ss>>nodeid2;
+                        if (!ss.fail()) {
+                            ss.clear();
+                            if (nodeid1 != nodeid2) {
+                                cout << "Inserted: resistor " << name << " " << resistance << " 0hms "
+                                        << nodeid1 << " -> " << nodeid2 << endl;
+                            } else
+                                cout << "Error: both terminals of resistor connect to node " << nodeid1;
+                        } else
+                            cout << "Error: invalid argument" << endl;
+                    } else
+                        cout << "Error: invalid argument" << endl;
+
+                }
+            }
+        }
+        cout << "Error: too many arguments" << endl;
+
+    }
 }
+
 void modify(string line) {
+    string name, command;
+    double resistance;
+    if (numberOfWords(line) == 1)
+        cout << "Error: too few arguments" << endl;
+    if (numberOfWords(line) == 2) {
+        stringstream ss(line);
+        ss>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else
+            cout << "Error: too few arguments" << endl;
+    }
+    if (numberOfWords(line) == 3) {
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else {
+            ss >> command >> name >> resistance;
+            if (!ss.fail()) {
+                if (resistance < 0)
+                    cout << "Error: negative resistance" << endl;
+                else
+                    cout <<"Modified: resistor "<<name<<" to "<<resistance<<" 0hms"<< endl;
+            } else {
+                cout << "Error: invalid argument" << endl;
+                ss.clear();
+            }
+        }
+    }
+    if(numberOfWords(line)>3){
+        stringstream ss(line);
+        ss >> command>>name;
+        if (name == "all")
+            cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
+        else {
+            ss >> command >> name >> resistance;
+            if (ss.fail()) {
+                cout << "Error: invalid argument" << endl;
+                ss.clear();
+            } else {
+                if (resistance < 0)
+                    cout << "Error: negative resistance" << endl;
+                else
+                    cout <<"Error: too many arguments"<< endl;
+                
+            }
+        }
+        
+    }
 
 }
+
 void print(string line) {
-
+ string name, command;
+    if (numberOfWords(line) == 1)
+        cout << "Error: too few arguments" << endl;
+    if (numberOfWords(line) == 2) {
+        stringstream ss(line);
+        ss>>command>>name;
+        if (name == "all")
+            cout << "Print: all resistors"<< endl;
+        else
+            cout << "Print: resistor "<<name<<endl;
+    }
+    if(numberOfWords(line)>3){
+        stringstream ss(line);
+        ss>>command>>name;
+        if (name == "all")
+            cout << "Error: too many arguments"<< endl;
+        else
+            cout << "Print: resistor "<<name<<endl;
+    }
 }
+
+
 void printNode(string line) {
-
+    int nodeid=NULL;
+    string name, command;
+    if (numberOfWords(line) == 1)
+        cout << "Error: too few arguments" << endl;
+    if (numberOfWords(line) == 2) {
+        stringstream ss(line);
+        ss>>command;
+        nodeid=ss.peek();
+        if(nodeid!=NULL){
+            ss>>nodeid;
+            if(0<=nodeid<=5000)
+                cout<<"Print: node "<<nodeid<<endl;
+            else
+                cout<<"Error: node "<<nodeid<<" is out of permitted rang 0-5000"<<endl;
+        }
+        else
+            ss>>name;
+            if (name == "all")
+            cout << "Print: all nodes"<< endl;
+        else
+            cout <<"Error: invalid argument"<<endl;
+    }
+    if(numberOfWords(line)>3){
+       stringstream ss(line);
+        ss>>command;
+        nodeid=ss.peek();
+        if(nodeid!=NULL){
+            ss>>nodeid;
+            if(0<=nodeid<=5000)
+                cout<<"Error: too many arguments"<<endl;
+            else
+                cout<<"Error: node "<<nodeid<<" is out of permitted rang 0-5000"<<endl;
+        }
+        else
+            ss>>name;
+            if (name == "all")
+            cout << "Error: too many arguments"<< endl;
+        else
+            cout <<"Error: invalid argument"<<endl;
+    }
 }
-void deleteFunction(string line) {
 
+void deleteFunction(string line) {
+    string name, command;
+    if (numberOfWords(line) == 1)
+        cout << "Error: too few arguments" << endl;
+    if (numberOfWords(line) == 2) {
+        stringstream ss(line);
+        ss>>command>>name;
+        if (name == "all")
+            cout << "Deleted: all resistors"<< endl;
+        else
+            cout <<"Deleted: resistor "<<name<<endl;
+    }
+    if(numberOfWords(line)>3){
+        cout<<"Error: too many arguments"<<endl;
+    }
 }
 
 int numberOfWords(string line) {
-	stringstream ss(line);
-	string whatever;
-	int number=0;
-	while (!ss.eof()) {
-		ss >> whatever;
-		number++;
-	}
-	return number;
+    stringstream ss(line);
+    string whatever;
+    int number = 0;
+    while (!ss.eof()) {
+        ss >> whatever;
+        number++;
+    }
+    return number;
 }
-
