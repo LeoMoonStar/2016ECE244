@@ -40,22 +40,35 @@ void insert(string line) {
 	string command, name;
 	double resistance;
 	int nodeid1, nodeid2;
-	if ((numberOfWords(line) == 1) || numberOfWords(line) == 2)
-		cout << "Error: too few arguements" << endl;
+	if (numberOfWords(line) == 1)
+		cout << "Error: too few arguments" << endl;
+        if(numberOfWords(line)==2){
+            stringstream ss(line);
+            ss>>command>>name;
+            if(name=="all")
+                cout<<"Error: resistor name cannot be the keyword \"all\""<<endl;
+            else
+                cout << "Error: too few arguments" << endl;
+        }
 	if (numberOfWords(line) == 3) {
 		stringstream ss(line);
-		ss >> command >> name >> resistance;
+		ss>>command>>name;
+                if(name=="all")
+                    cout<<"Error: resistor name cannot be the keyword \"all\""<<endl;
+                else{
+                    ss >> command >> name >> resistance;
 		if (!ss.fail()) {
 			if (resistance < 0)
 				cout << "Error: negative resistance" << endl;
 			else
-				cout << "Error: too few arguements" << endl;
+				cout << "Error: too few arguments" << endl;
 		}
 		else {
-			cout << "Error: invalid arguement" << endl;
+			cout << "Error: invalid argument" << endl;
 			ss.clear();
 		}
-	}
+                }
+        }
 	if (numberOfWords(line) == 4) {
 		stringstream ss(line);
 		ss >> command >> name >> resistance;
@@ -66,16 +79,34 @@ void insert(string line) {
 				if (!(0 <= nodeid1 <= 5000))
 					cout << "Error: node " << nodeid1 << " is out of permitted range 0-5000" << endl;
 				else
-					cout << "Error: too few arguements" << endl;
+					cout << "Error: too few arguments" << endl;
 			}
 			else 
-				cout << "Error: invalid arguement" << endl;
+				cout << "Error: invalid argument" << endl;
 		}
 	}
 	if (numberOfWords(line) == 5) {
 		stringstream ss(line);
 		ss >> command >> name >> resistance;
 		if (!ss.fail()) {
+                    ss.clear();
+                    ss>>nodeid1;
+                    if(!ss.fail()){
+                        ss.clear();
+                        ss>>nodeid2;
+                        if(!ss.fail()){
+                            if(nodeid1!=nodeid2)
+                            {
+                                cout<<"Inserted: resistor "<<name<<" "<<resistance<<" 0hms "
+                                        <<nodeid1<<" -> "<<nodeid2<<endl;
+                            }
+                            else 
+                                cout<<"Error: both terminals of resistor connect to node "<<nodeid1;
+                                    
+                        }
+                        else
+                            cout << "Error: invalid argument" << endl;
+                    }
 
 		}
 	}
