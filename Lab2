@@ -1,6 +1,7 @@
 #include<iostream>
 #include<sstream>
 #include<string>
+#include<iomanip>
 using namespace std;
 
 void insert(string line);
@@ -9,6 +10,7 @@ void print(string line);
 void printNode(string line);
 void deleteFunction(string line);
 int numberOfWords(string line);
+int judgeTypeOfWord(string line);
 
 int main() {
     string line, command;
@@ -73,7 +75,7 @@ void insert(string line) {
         if (name == "all") {
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         } else {
-            ss >> command >> name >> resistance;
+            ss >> resistance;
             if (!ss.fail()) {
                 ss.clear();
                 ss >> nodeid1;
@@ -93,23 +95,23 @@ void insert(string line) {
         if (name == "all")
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
-            ss >> command >> name >> resistance;
+            ss >> resistance;
             if (!ss.fail()) {
                 ss.clear();
                 if (resistance < 0)
                     cout << "Error: negative resistance" << endl;
                 else {
-                    ss>>nodeid1;
+                    ss >> nodeid1;
                     if (!ss.fail()) {
                         ss.clear();
-                        ss>>nodeid2;
+                        ss >> nodeid2;
                         if (!ss.fail()) {
                             ss.clear();
                             if (nodeid1 != nodeid2) {
-                                cout << "Inserted: resistor " << name << " " << resistance << " 0hms "
+                                cout << "Inserted: resistor " << name << " " <<setprecision(2)<<fixed<<resistance << " 0hms "
                                         << nodeid1 << " -> " << nodeid2 << endl;
                             } else
-                                cout << "Error: both terminals of resistor connect to node " << nodeid1;
+                                cout << "Error: both terminals of resistor connect to node " << nodeid1<<endl;
                         } else
                             cout << "Error: invalid argument" << endl;
                     } else
@@ -125,7 +127,7 @@ void insert(string line) {
         if (name == "all")
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
-            ss >> command >> name >> resistance;
+            ss >> resistance;
             if (!ss.fail()) {
                 ss.clear();
                 if (resistance < 0)
@@ -138,7 +140,7 @@ void insert(string line) {
                         if (!ss.fail()) {
                             ss.clear();
                             if (nodeid1 != nodeid2) {
-                                cout << "Inserted: resistor " << name << " " << resistance << " 0hms "
+                                cout << "Inserted: resistor " << name << " " <<setprecision(2)<< fixed<<resistance << " 0hms "
                                         << nodeid1 << " -> " << nodeid2 << endl;
                             } else
                                 cout << "Error: both terminals of resistor connect to node " << nodeid1;
@@ -174,12 +176,12 @@ void modify(string line) {
         if (name == "all")
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
-            ss >> command >> name >> resistance;
+            ss >> resistance;
             if (!ss.fail()) {
                 if (resistance < 0)
                     cout << "Error: negative resistance" << endl;
                 else
-                    cout <<"Modified: resistor "<<name<<" to "<<resistance<<" 0hms"<< endl;
+                    cout <<"Modified: resistor "<<name<<" to "<<setprecision(2)<<fixed<<resistance<<" 0hms"<< endl;
             } else {
                 cout << "Error: invalid argument" << endl;
                 ss.clear();
@@ -192,7 +194,7 @@ void modify(string line) {
         if (name == "all")
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
-            ss >> command >> name >> resistance;
+            ss >> resistance;
             if (ss.fail()) {
                 cout << "Error: invalid argument" << endl;
                 ss.clear();
@@ -234,14 +236,14 @@ void print(string line) {
 
 void printNode(string line) {
     int nodeid=NULL;
-    string name, command;
+    string name, command,s2;
     if (numberOfWords(line) == 1)
         cout << "Error: too few arguments" << endl;
     if (numberOfWords(line) == 2) {
         stringstream ss(line);
         ss>>command;
-        nodeid=ss.peek();
-        if(nodeid!=NULL){
+        getline(ss,s2);
+        if(judgeTypeOfWord(s2)==1){
             ss>>nodeid;
             if(0<=nodeid<=5000)
                 cout<<"Print: node "<<nodeid<<endl;
@@ -258,8 +260,8 @@ void printNode(string line) {
     if(numberOfWords(line)>3){
        stringstream ss(line);
         ss>>command;
-        nodeid=ss.peek();
-        if(nodeid!=NULL){
+        getline(ss,s2);
+        if(judgeTypeOfWord(s2)==1){
             ss>>nodeid;
             if(0<=nodeid<=5000)
                 cout<<"Error: too many arguments"<<endl;
@@ -301,4 +303,33 @@ int numberOfWords(string line) {
         number++;
     }
     return number;
+}
+
+int judgeTypeOfWord(string line){
+    int intType;
+    double doubleType;
+    char charType;
+    stringstream ss(line);
+    ss>>intType;
+    if(!ss.fail()){
+        return 1;
+    }
+    else{
+        ss.clear();
+        stringstream ss(line);
+        ss>>doubleType;
+        if(!ss.fail()){
+            return 2;
+        }
+        else{
+            ss.clear();
+            stringstream ss(line);
+            ss>>charType;
+            if(!ss.fail())
+                return 3;
+            else 
+                return 4;    
+        }
+    }
+    
 }
