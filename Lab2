@@ -18,10 +18,11 @@ int judgeTypeOfWord(string line);
 void trim(string& s);
 
 int main() {
-    string line, command;
+    string line;
     cout << "> ";
     getline(cin, line);
     while (!cin.eof()) {
+        string command;
         stringstream ss(line);
         ss >> command;
         if (command == "insertR")
@@ -43,7 +44,7 @@ int main() {
 }
 
 void insert(string line) {
-    string command, name,s2;
+    string command, name, s2;
     double resistance;
     int nodeid1, nodeid2;
     if (numberOfWords(line) == 1)
@@ -112,8 +113,11 @@ void insert(string line) {
                             cout << "Error: node " << nodeid1 << " is out of permitted range 0-5000" << endl;
                         else {
                             ss.clear();
-                            ss >> nodeid2;
-                            if (!ss.fail()&ss.eof()) {
+                            getline(ss, s2);
+                            if (judgeTypeOfWord(s2) == 1) {
+                                trim(s2);
+                                stringstream ss(s2);
+                                ss >> nodeid2;
                                 ss.clear();
                                 if (nodeid2 < 0 || nodeid2 > 5000)
                                     cout << "Error: node " << nodeid2 << " is out of permitted range 0-5000" << endl;
@@ -146,25 +150,31 @@ void insert(string line) {
                 else {
                     ss >> nodeid1;
                     if (!ss.fail()) {
-                        ss.clear();
-                        if (!ss.fail()&ss.eof()) {
+                        if (nodeid1 < 0 || nodeid1 > 5000)
+                            cout << "Error: node " << nodeid1 << " is out of permitted range 0-5000" << endl;
+                        else {
                             ss.clear();
-                            if (nodeid1 != nodeid2) {
-                                cout << "Inserted: resistor " << name << " " << setprecision(2) << fixed << resistance << " Ohms "
-                                        << nodeid1 << " -> " << nodeid2 << endl;
+                            getline(ss, s2);
+                            if (judgeTypeOfWord(s2) == 1) {
+                                trim(s2);
+                                stringstream ss(s2);
+                                ss >> nodeid2;
+                                ss.clear();
+                                if (nodeid2 < 0 || nodeid2 > 5000)
+                                    cout << "Error: node " << nodeid2 << " is out of permitted range 0-5000" << endl;
+                                else if (nodeid1 != nodeid2) {
+                                    cout << "Error: too many arguments" << endl;
+                                } else if (nodeid1 == nodeid2)
+                                    cout << "Error: both terminals of resistor connect to node " << nodeid1 << endl;
                             } else
-                                cout << "Error: both terminals of resistor connect to node " << nodeid1;
-                        } else
-                            cout << "Error: invalid argument" << endl;
+                                cout << "Error: invalid argument" << endl;
+                        }
                     } else
                         cout << "Error: invalid argument" << endl;
-
                 }
-                // cout << "Error: too many arguments" << endl;
-            }
+            } else
+                cout << "Error: invalid argument" << endl;
         }
-
-
     }
 }
 
@@ -189,7 +199,7 @@ void modify(string line) {
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
             ss >> resistance;
-            if (!ss.fail()&&ss.eof()) {
+            if (!ss.fail() && ss.eof()) {
                 if (resistance < 0)
                     cout << "Error: negative resistance" << endl;
                 else
@@ -208,15 +218,14 @@ void modify(string line) {
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
             ss >> resistance;
-            if (!ss.fail()) { 
+            if (!ss.fail()) {
                 if (resistance < 0)
                     cout << "Error: negative resistance" << endl;
                 else
                     cout << "Error: too many arguments" << endl;
-            } 
-            else {
-              cout << "Error: invalid argument" << endl;
-                ss.clear();  
+            } else {
+                cout << "Error: invalid argument" << endl;
+                ss.clear();
             }
         }
 
@@ -316,7 +325,8 @@ int numberOfWords(string line) {
     int number = 0;
     while (!ss.eof()) {
         ss >> whatever;
-        number++;
+        if (!ss.fail())
+            number++;
     }
     return number;
 }
@@ -329,19 +339,25 @@ int judgeTypeOfWord(string line) {
     trim(line);
     stringstream ss(line);
     ss >> intType;
-    if ((!ss.fail())) {
+    bool intFlag = ss.fail();
+    getline(ss, restOfString);
+    if (!intFlag && (numberOfWords(restOfString) != numberOfWords(line))) {
         return 1;
     } else {
         ss.clear();
         stringstream ss(line);
         ss >> doubleType;
-        if (!ss.fail()) {
+        bool doubleFlag = ss.fail();
+        getline(ss, restOfString);
+        if (!doubleFlag && numberOfWords(restOfString) != numberOfWords(line)) {
             return 2;
         } else {
             ss.clear();
             stringstream ss(line);
             ss >> charType;
-            if (!ss.fail())
+            bool charFlag = ss.fail();
+            getline(ss, restOfString);
+            if (!charFlag && numberOfWords(restOfString) != numberOfWords(line))
                 return 3;
             else
                 return 4;
@@ -350,7 +366,7 @@ int judgeTypeOfWord(string line) {
 
 }
 
-void trim(string& s) {
+void trim(string & s) {
     size_t p = s.find_first_not_of(" \t");
     s.erase(0, p);
     p = s.find_last_not_of(" /t");
