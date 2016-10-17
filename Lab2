@@ -63,6 +63,7 @@ void insert(string line) {
         if (name == "all")
             cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
         else {
+            stringstream ss(line);
             ss >> command >> name >> resistance;
             if (!ss.fail()) {
                 if (resistance < 0)
@@ -293,6 +294,7 @@ void printNode(string line) {
             else
                 cout << "Error: node " << nodeid << " is out of permitted range 0-5000" << endl;
         } else {
+            stringstream ss(s2);
             ss >> name;
             if (name == "all")
                 cout << "Error: too many arguments" << endl;
@@ -314,7 +316,7 @@ void deleteFunction(string line) {
         else
             cout << "Deleted: resistor " << name << endl;
     }
-    if (numberOfWords(line) > 3) {
+    if (numberOfWords(line) >= 3) {
         cout << "Error: too many arguments" << endl;
     }
 }
