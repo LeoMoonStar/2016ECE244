@@ -29,6 +29,9 @@ public:
    friend ostream& operator<<(ostream&,const Resistor&);
 };
 
-ostream& operator<<(ostream&,const Resistor&);
+ostream& operator<<(ostream&,const Resistor&){
+  os<<Resistor.name<<std::setw(22)<<Resistor.resistance<<" Ohms "<<Resistor.endpointNodeIDs[0]<<" -> "
+  <<Resistor.endpointNodeIDs[1]<<endl;
+}
 
 #endif	/* RESISTOR_H */

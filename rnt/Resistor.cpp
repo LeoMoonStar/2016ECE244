@@ -24,6 +24,9 @@ Resistor::Resistor(int rIndex_,string name_,double resistance_,int endpoints_[2]
 Resistor::~Resistor(){
 
 }
+void Resistor::print(){
+  operator<<(ostrem&,const Resistor&);
+}
 
 string Resistor::getName() const {
   return name;

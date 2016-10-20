@@ -14,6 +14,7 @@ private:
   int maxNodeNumber,maxResistors;
   double resistance;
   int nodeid1,nodeid2;
+  int currentResistorSize,currentNodeSize;
 public:
   Parser();//constructor
   ~Parser();//Decondstructor
@@ -25,4 +26,5 @@ public:
   void printR(string line);
   void printNode(string line);
   void deleteR(string line);
+  int countTheWord(string line);
 }
