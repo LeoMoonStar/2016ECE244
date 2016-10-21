@@ -37,7 +37,7 @@ void Node::print(int nodeIndex){
   cout<<"Print:"<<endl;
   cout<<"Connection at node "<<nodeIndex<<": "<<numRes<<" resistor(s)"<<endl;
 for(int i=0;i<numRes;i++){
-  cout<<setfill(2)<<arrayResistor[resIDArray[i].name]
+  cout<<setfill(2)<<arrayResistor[resIDArray[i]].print();
 }
 }
 

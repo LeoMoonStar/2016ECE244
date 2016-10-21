@@ -14,7 +14,7 @@ Resistor *arrayResistor=NULL; //globe resistor array
 Node *arrayNode=NULL;//globe node array
 
 
-void Parser::Parser(){
+Parser::Parser(){
 maxResistors=0;
 maxNodeNumber=0;
 resistance=0.0;
@@ -73,7 +73,7 @@ void Parser::maxVal(string line){
   }
 }
 
-void Parser::insertR(string line){
+void Parser::insertR(string line){//still dont know when to judge the name exist error
   if (numberOfWords(line) == 1)
           cout << "Error: too few arguments" << endl;
       if (numberOfWords(line) == 2) {
@@ -178,7 +178,7 @@ void Parser::insertR(string line){
           ss >> command >> name;
           if (name == "all")
               cout << "Error: resistor name cannot be the keyword \"all\"" << endl;
-          else {
+          else if(nameNoExist(name)){
               ss >> resistance;
               if (!ss.fail()) {
                   ss.clear();
@@ -215,10 +215,9 @@ void Parser::insertR(string line){
       }
 
   }
+
 void Parser::modifyR(string line){
-  trim(line);
-    string name, command;
-    double resistance;
+    trim(line);
     if (numberOfWords(line) == 1)
         cout << "Error: too few arguments" << endl;
     if (numberOfWords(line) == 2) {
@@ -239,8 +238,14 @@ void Parser::modifyR(string line){
             if (!ss.fail() && ss.eof()) {
                 if (resistance < 0)
                     cout << "Error: negative resistance" << endl;
-                else
-                    cout << "Modified: resistor " << name << " to " << setprecision(2) << fixed << resistance << " Ohms" << endl;
+                else{
+                  int index=getResistanceIndex(name);
+                  double oldResistance=arrayResistor[index].getResistance();
+                  arrayResistor[index].setResistance(resistance);
+                    cout << "Modified: resistor " << arrayResistor[index].getname() <<" from "<<
+                    setprecision(2) << fixed<<oldResistance
+                    " to " << setprecision(2) << fixed << arrayResistor[index].getResistance() << " Ohms" << endl;
+                  }
             } else {
                 cout << "Error: invalid argument" << endl;
                 ss.clear();
@@ -269,27 +274,37 @@ void Parser::modifyR(string line){
     }
 
 }
+
 void Parser::printR(string line){
-  string name, command;
     if (numberOfWords(line) == 1)
         cout << "Error: too few arguments" << endl;
     if (numberOfWords(line) == 2) {
         stringstream ss(line);
         ss >> command >> name;
-        if (name == "all")
-            cout << "Print: all resistors" << endl;
-        else
-            cout << "Print: resistor " << name << endl;
+        if (name == "all"){//print all resistors
+          cout << "Print:"<< endl;
+          for(int i=0;i<currentResistorSize;i++)
+          arrayResistor[i].print();
+            }
+        else{
+          if(nameNoExist(name))//print the selected resistor
+          cout<<"Error: resistor "<<name<<" not found"<<endl;
+          else
+            cout << "Print:"<< endl;
+            arrayResistor[getResistanceIndex(name)].print();
+          }
     }
     if (numberOfWords(line) >= 3) {
 
         cout << "Error: too many arguments" << endl;
     }
 }
+
+
 void Parser::printNode(string line){
   trim(line);
     int nodeid = NULL;
-    string name, command, s2;
+    string s2;
     if (numberOfWords(line) == 1)
         cout << "Error: too few arguments" << endl;
     if (numberOfWords(line) == 2) {
@@ -300,17 +315,22 @@ void Parser::printNode(string line){
         if (judgeTypeOfWord(s2) == 1) {
             stringstream ss(s2);
             ss >> nodeid;
-            if (0 < nodeid && nodeid < 5000)
-                cout << "Print: node " << nodeid << endl;
+            if (0 < nodeid && nodeid < maxNodeNumber){
+                cout << "Print:"<< endl;
+                arrayNode[nodeid].print();
+              }
             else
-                cout << "Error: node " << nodeid << " is out of permitted range 0-5000" << endl;
+                cout << "Error: node " << nodeid << " is out of permitted range 0-" <<maxNodeNumber<< endl;
         } else {
             getline(ss, s2);
             trim(s2);
             stringstream ss(s2);
             ss>>name;
-            if (name == "all")
-                cout << "Print: all nodes" << endl;
+            if (name == "all"){
+                cout << "Print:" << endl;
+                for(int i=0;i<currentNodeSize;i++)//need a function to indicate the exact size of currentNodeSize
+                arrayNode[i].print();//and sort them based on their number
+              }
             else
                 cout << "Error: invalid argument" << endl;
         }
@@ -323,10 +343,10 @@ void Parser::printNode(string line){
         if (judgeTypeOfWord(s2) == 1) {
             stringstream ss(s2);
             ss >> nodeid;
-            if (0 <= nodeid && nodeid <= 5000)
+            if (0 <= nodeid && nodeid <= maxNodeNumber)
                 cout << "Error: too many arguments" << endl;
             else
-                cout << "Error: node " << nodeid << " is out of permitted range 0-5000" << endl;
+                cout << "Error: node " << nodeid << " is out of permitted range 0-" <<maxNodeNumber<< endl;
         } else {
             stringstream ss(s2);
             ss >> name;
@@ -337,6 +357,7 @@ void Parser::printNode(string line){
         }
     }
 }
+
 void Parser::deleteR(string line){
   string name, command;
     if (numberOfWords(line) == 1)
@@ -344,8 +365,13 @@ void Parser::deleteR(string line){
     if (numberOfWords(line) == 2) {
         stringstream ss(line);
         ss >> command >> name;
-        if (name == "all")
+        if (name == "all"){
+          int i;
+          Node delN;
+          Resistor del;
+          for(i=0;i<cur)
             cout << "Deleted: all resistors" << endl;
+          }
         else
             cout << "Deleted: resistor " << name << endl;
     }
@@ -402,12 +428,19 @@ int Rparser::judgeTypeOfWord(string line) {
 
 }
 
+int Rparser::getResistanceIndex(string name){
+
+  for(int i=0;i<currentResistorSize;i++){
+    if(name==arrayResistor[i].getName())
+    return i;
+  }
+}
+
+
 bool Rparser::nameNoExist(string name){
   for(int i=0;i<currentResistorSize;i++){
-    if(name==arrayResistor[i].getName()){
-      cout<<"Error: resistor "<<name<<" already exist"<<endl;
-      return false;
-    }
+    if(name==arrayResistor[i].getName())
+    return false;
     else
     return true;
   }

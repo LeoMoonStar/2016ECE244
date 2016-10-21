@@ -30,4 +30,5 @@ public:
   int judgeTypeOfWord(string line);
   bool nameNoExist(string name);
   void trim(string & s);
+  int getResistanceIndex(string name);
 }
