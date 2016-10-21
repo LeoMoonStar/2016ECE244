@@ -21,17 +21,14 @@ public:
 
    string getName() const; // returns the name
    double getResistance() const; // returns the resistance
-
+   void setName(string name);
    void setResistance (double resistance_);
+   void setEndPoint(int nodeid1,int nodeid2);
+   int getEndPoint1();
+   int getEndPoint2();
 
    // you *may* create either of the below to print your resistor
    void print ();
-   friend ostream& operator<<(ostream&,const Resistor&);
+
 };
-
-ostream& operator<<(ostream&,const Resistor&){
-  os<<Resistor.name<<std::setw(22)<<Resistor.resistance<<" Ohms "<<Resistor.endpointNodeIDs[0]<<" -> "
-  <<Resistor.endpointNodeIDs[1]<<endl;
-}
-
 #endif	/* RESISTOR_H */

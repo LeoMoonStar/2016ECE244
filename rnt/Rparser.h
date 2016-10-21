@@ -27,4 +27,7 @@ public:
   void printNode(string line);
   void deleteR(string line);
   int countTheWord(string line);
+  int judgeTypeOfWord(string line);
+  bool nameNoExist(string name);
+  void trim(string & s);
 }

@@ -27,9 +27,6 @@ public:
    // Checks to see if the resistor can be added to poistion rIndex
    // in the resistor array. Returns true if yes, otherwise false.
    bool canAddResistor(int rIndex);
-
-
-
    // prints the whole node
    // nodeIndex is the position of this node in the node array.
    void print (int nodeIndex);
