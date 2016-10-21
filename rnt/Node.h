@@ -30,7 +30,7 @@ public:
    // prints the whole node
    // nodeIndex is the position of this node in the node array.
    void print (int nodeIndex);
-
+   void update();
 };
 
 #endif	/* NODE_H */

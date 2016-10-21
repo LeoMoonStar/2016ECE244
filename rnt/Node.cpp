@@ -41,5 +41,10 @@ for(int i=0;i<numRes;i++){
 }
 }
 
-
+void Node::update(){
+  numRes=0;
+  for(int i=0;i<MAX_RESISTORS_PER_NODE;i++){
+    resIDArray[i]=0;
+  }
+}
 #endif

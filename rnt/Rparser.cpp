@@ -14,7 +14,7 @@ Resistor *arrayResistor=NULL; //globe resistor array
 Node *arrayNode=NULL;//globe node array
 
 
-Parser::Parser(){
+Parser::Parser(){//constructor
 maxResistors=0;
 maxNodeNumber=0;
 resistance=0.0;
@@ -57,6 +57,7 @@ void Parser::functionSelect(string line){
     std::cout << "Error: invalid command" << std::endl;
   }
 }
+
 void Parser::maxVal(string line){
   stringstream ss(line);
   ss>>command>>maxNodeNumber>>maxResistors;
@@ -328,7 +329,7 @@ void Parser::printNode(string line){
             ss>>name;
             if (name == "all"){
                 cout << "Print:" << endl;
-                for(int i=0;i<currentNodeSize;i++)//need a function to indicate the exact size of currentNodeSize
+                for(int i=0;i<maxNodeNumber;i++)//need a function to indicate the exact size of currentNodeSize
                 arrayNode[i].print();//and sort them based on their number
               }
             else
@@ -366,14 +367,16 @@ void Parser::deleteR(string line){
         stringstream ss(line);
         ss >> command >> name;
         if (name == "all"){
-          int i;
-          Node delN;
-          Resistor del;
-          for(i=0;i<cur)
+          delete []arrayResistor;
+          Resistor *arrayResistor;
+          arrayResistor= new Resistor[maxResistors];
+          for(int i=0;i<maxNodeNumber;i++){
+            arrayNode[i].update();
+          }
             cout << "Deleted: all resistors" << endl;
           }
         else
-            cout << "Deleted: resistor " << name << endl;
+            cout << "Error: invalid arguments" << name << endl;
     }
     if (numberOfWords(line) >= 3) {
         cout << "Error: too many arguments" << endl;
