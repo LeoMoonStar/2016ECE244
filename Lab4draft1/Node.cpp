@@ -1,15 +1,33 @@
+/* 
+ * File:   Node.cpp
+ * Author: yangjiaw
+ * 
+ * Created on November 8, 2016, 2:17 PM
+ */
+
 #include "Node.h"
 
-
-
-Node::Node()
-{
+Node::Node() {
+    NodeId=0;
+    voltage=0.0;
 }
 
 
-Node::~Node()
-{
+int Node::getId(){
+return NodeId;
 }
-void Node::setVoltage() {
 
+double Node::getVoltage(){
+    return voltage;
 }
+
+void Node::setId(int id){
+NodeId=id;    
+}
+void Node::setVoltage(double v){
+    voltage=v;
+}
+
+Node::~Node() {
+}
+
