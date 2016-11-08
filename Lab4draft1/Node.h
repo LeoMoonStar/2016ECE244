@@ -6,7 +6,6 @@
 class Node
 {
 private:
-	int nodeNumber;
 	double voltage;
 	Resistor *header;
 
