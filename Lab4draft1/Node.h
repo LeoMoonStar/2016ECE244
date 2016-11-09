@@ -1,25 +1,26 @@
-/* 
- * File:   Node.h
- * Author: yangjiaw
- *
- * Created on November 8, 2016, 2:17 PM
- */
-#include "ResistorList.h"
+#pragma once
 #ifndef NODE_H
-#define	NODE_H
+#define NODE_H
 
-class Node {
-public:
-    Node();
-    int getId();
-    double getVoltage();
-    void setId(int id);
-    void setVoltage(double v);
-    ~Node();
+#include"Resistor.h"
+#include"ResistorList.h"
+class Node
+{
 private:
-    int NodeId;
-    double voltage;
+	int NodeId;
+	double voltage;
+	ResistorList* r;
+	Node* nextNode;
+
+public:
+	Node();
+	Node(int i);
+	~Node();
+	int getId();
+	double getVoltage();
+	void setId(int id);
+	void setVoltage(double v);
+	Node* returnNext();
 };
 
-#endif	/* NODE_H */
-
+#endif // !NODE_H

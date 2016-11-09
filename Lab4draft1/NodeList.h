@@ -1,22 +1,15 @@
-/* 
- * File:   NodeList.h
- * Author: yangjiaw
- *
- * Created on November 8, 2016, 2:18 PM
- */
-#include "Node.h"
 #ifndef NODELIST_H
-#define	NODELIST_H
-
-class NodeList {
-public:
-    NodeList();
-    ~NodeList();
+#define NODELIST_H
+#include"Node.h"
+#include"ResistorList.h"
+class NodeList
+{
 private:
-    Node node;
-    ResistorList rList;
-    Node* next;
+	Node* head;
+public:
+	NodeList();
+	~NodeList();
+	Node* returnHead();
 };
 
-#endif	/* NODELIST_H */
-
+#endif

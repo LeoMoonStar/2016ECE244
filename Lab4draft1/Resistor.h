@@ -1,22 +1,22 @@
-/* 
- * File:   Resistor.h
- * Author: yangjiaw
- *
- * Created on November 8, 2016, 2:17 PM
- */
 
 #ifndef RESISTOR_H
-#define	RESISTOR_H
-const int MAX_LABLE_LENGTH=100;
-class Resistor {
-public:
-    Resistor();
-  
-    ~Resistor();
+#define RESISTOR_H
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Resistor
+{
 private:
-    char lable[MAX_LABLE_LENGTH];
-    int endpoints[2];
+	string name;
+	double resistance;
+	int endpoints[2];
+	Resistor* nextR;
+public:
+	Resistor();
+	Resistor(string nm, double res, int endpoints[2]);
+	~Resistor();
+	int getEndPoint(int i);
+	Resistor* returnNext();
 };
-
-#endif	/* RESISTOR_H */
-
+#endif /*RESISTOR_H*/
