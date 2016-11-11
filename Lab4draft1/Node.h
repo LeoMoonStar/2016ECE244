@@ -11,16 +11,28 @@ private:
 	double voltage;
 	ResistorList* r;
 	Node* nextNode;
+	bool setV;
+	int resNumber;
 
 public:
 	Node();
 	Node(int i);
 	~Node();
 	int getId();
+	int getResNumb();
 	double getVoltage();
 	void setId(int id);
 	void setVoltage(double v);
-	Node* returnNext();
+	Node* returnNext()const;
+	void setNext(Node*newNode);
+	ResistorList* returnRlHead();
+	void addNode(Node * newNode);
+	void deleteOneResistor();
+	void addResistor(Resistor* newRes);
+	bool voltageseted();
+	void nodePrint();
+	void unsetV();
+	
 };
-
+double returnAbsValue(double a);
 #endif // !NODE_H

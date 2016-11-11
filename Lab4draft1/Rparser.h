@@ -7,6 +7,7 @@
 #include<iostream>
 #include<string>
 #include<sstream>
+#include<iomanip>
 #include"NodeList.h"
 
 
@@ -17,7 +18,7 @@ class Rparser {
 public:
 	Rparser();//CONSTRUCTOR
 	~Rparser();//DECONSTRUCTOR
-	void parser();
+	
 	void functionSelect(string line);
 	void insertR(string line);
 	void modifyR(string line);
@@ -28,12 +29,12 @@ public:
 	void printNode(string line);
 	void solve(string line);
 private:
-	string line, command, name;
+	string command, name;
 	int nodeid1, nodeid2;
 	double resistance;
 	double voltage;
 	NodeList nodeList;
 };
-
+void parser();
 #endif	/* RPARSER_H */
 
