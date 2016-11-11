@@ -42,6 +42,9 @@ void Node::setVoltage(double v) {
 	voltage = v;
 	setV = true;
 }
+void Node::setVoltagebysolve(double v) {
+	voltage = v;
+}
 
 Node::~Node() {
 	delete r;
@@ -86,4 +89,8 @@ int Node::getResNumb() {
 void Node::unsetV() {
 	voltage = 0;
 	setV = false;
+}
+
+int Node::returnResNumber() {
+	return resNumber;
 }

@@ -32,6 +32,8 @@ public:
 	bool voltageseted();
 	void nodePrint();
 	void unsetV();
+	void setVoltagebysolve(double v);
+	int returnResNumber();
 	
 };
 double returnAbsValue(double a);

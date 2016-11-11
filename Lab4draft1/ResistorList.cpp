@@ -40,10 +40,11 @@ void ResistorList::deleteResistor(string resistor) {
 		previous = current;
 		current = current->returnNext();
 	}
-	Resistor* temp = current;
-	current = current->returnNext();
-	previous->returnNext()->addResistor(current);
-	delete temp;
+	if (previous == NULL)
+		head = current->returnNext();
+	else
+		previous->addResistor(current->returnNext());
+	delete current;
 }
 
 void ResistorList::deleteAllResistor() {

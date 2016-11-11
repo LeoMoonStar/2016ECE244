@@ -75,7 +75,7 @@ void NodeList::printVoltage() {
 	}
 }
 
-void NodeList::solve() {
+void NodeList::solve() {//finally work
 	MIN_ITERATION_CHANGE = 2;
 	while (MIN_ITERATION_CHANGE > 0.0001) {
 		double v = 0;
@@ -85,8 +85,8 @@ void NodeList::solve() {
 		{
 			if (!current->voltageseted()) {
 				int resNum = current->getResNumb();
-				double *res = new double[resNum];
-				double *vol = new double[resNum];
+				double res[10];
+				double vol[10];
 				Resistor *temp = current->returnRlHead()->returnHead();
 				int i = 0;
 				while (temp != NULL) {
@@ -115,8 +115,7 @@ void NodeList::solve() {
 				double change = current->getVoltage() - ((1 / part1)*part2);
 				if ((MIN_ITERATION_CHANGE < returnAbsValue(change)) || (MIN_ITERATION_CHANGE == returnAbsValue(change)))
 					MIN_ITERATION_CHANGE = returnAbsValue(change);
-				current->setVoltage((1 / part1)*part2);
-				
+				current->setVoltagebysolve((1 / part1)*part2);
 			}
 			current = current->returnNext();
 		}

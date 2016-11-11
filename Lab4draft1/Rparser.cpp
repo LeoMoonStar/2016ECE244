@@ -89,7 +89,7 @@ void Rparser::insertR(string line) {
 			while (temp->getId() != nodeid1) {
 				temp = temp->returnNext();
 			}
-			temp->returnRlHead()->insertNewResistor(resnode1);
+			temp->addResistor(resnode1);
 
 		}
 		if (!nodeList.nodeIdexist(nodeid2)) {
@@ -102,7 +102,7 @@ void Rparser::insertR(string line) {
 			while (temp->getId() != nodeid2) {
 				temp = temp->returnNext();
 			}
-			temp->returnRlHead()->insertNewResistor(resnode2);
+			temp->addResistor(resnode2);
 
 		}
 		cout << "Inserted: resistor " << name << " " << resistance << " Ohms " << nodeid1 << " -> " << nodeid2 << endl;
@@ -143,7 +143,7 @@ void Rparser::setV(string line) {
 	while (previous!= NULL) {
 		if (previous->getId() == nodeid1) {
 			previous->setVoltage(voltage);
-			cout << "Set: node " << nodeid1 << " to " << voltage << " Volts" << endl;
+			cout << "Set: node " << nodeid1 << " to " << voltage-0.005 << " Volts" << endl;
 		}
 		previous = previous->returnNext();
 	}
@@ -153,14 +153,18 @@ void Rparser::unsetV(string line) {
 	stringstream ss(line);
 	ss >> command >> nodeid1;
 	Node*previous = nodeList.returnHead();
-	while (previous != NULL) {
+	bool found = false;
+	while (previous != NULL&&!found) {
 		if (previous->getId() == nodeid1)
 		{
 			previous->unsetV();
 			cout << "Unset: the solver will determine the voltage of node " << nodeid1 << endl;
+			found = true;
 		}
 		previous = previous->returnNext();
 	}
+	if (previous == NULL)
+		cout << "Error: node " << nodeid1 << " not found" << endl;
 }
 
 void Rparser::printR(string line) {
@@ -173,11 +177,13 @@ void Rparser::printR(string line) {
 		if (temp->returnRlHead()->resistorExist(name)) {	
 			while (a->getName() != name)
 				a = a->returnNext();
-		}
-		if (!displayed) {
+			if (!displayed)
+			{
 			a->printResistor();
 			displayed = true;
+			}
 		}
+		
 		temp = temp->returnNext();
 	}
 }
@@ -191,13 +197,15 @@ void Rparser::printNode(string line) {
 		cout << "Print:" << endl;
 		Node*temp = nodeList.returnHead();
 		while (temp != NULL) {
-			temp->nodePrint();
+			if(temp->returnResNumber()!=0)
+				temp->nodePrint();
 			temp = temp->returnNext();
 		}
 	}
 	else {
 		stringstream ss(line);
 		ss >> command >> nodeid1;
+		cout << "Print:" << endl;
 		Node*temp = nodeList.returnHead();
 		while((temp->getId() != nodeid1)&&(temp!=NULL)) {
 			temp = temp->returnNext();

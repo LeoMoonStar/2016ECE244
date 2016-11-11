@@ -54,6 +54,6 @@ void Resistor::printResistor() {
 	cout << " ";
 	cout << setfill(' ') << setw(8);
 	cout << right << resistance;
-	cout << ' ' << "Ohms" << getEndPoint(0) << " -> " << getEndPoint(1) << endl;
+	cout << ' ' << "Ohms " << getEndPoint(0) << " -> " << getEndPoint(1) << endl;
 }
 Resistor::~Resistor(){}
