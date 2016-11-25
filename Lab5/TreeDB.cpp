@@ -17,7 +17,10 @@ bool TreeDB::insert(DBentry *newEntry) {
 		bool onLeft;
 		while (current!= NULL) {
 			if (nameSame(temp->getEntry()->getName(), current->getEntry()->getName()))
+			{
+				delete newEntry;
 				return false;
+			}
 			else {
 				if (frontOneBigger(temp->getEntry()->getName(), current->getEntry()->getName()))
 				{
@@ -129,34 +132,34 @@ bool TreeDB::remove(string name) {
 				parentNode->setRight(newNodeAtThatPosition);
 			delete shouldMoved;
 		}
-			
-			/*//TreeNode*previous = NULL;
-			while (newNodeAtThatPosition->getRight() != NULL)
-			{
-				parentOfNewNode = newNodeAtThatPosition;
-				//previous = newNodeAtThatPosition;
-				newNodeAtThatPosition = newNodeAtThatPosition->getRight();
-			}//newNodeAtThatPosition already reaches the largest one that smaller than shouldMoved
-			//and its partents get
-			parentOfNewNode->setRight(NULL);
-			TreeNode *lefestOneOfSubTree = newNodeAtThatPosition;
-			while (lefestOneOfSubTree != NULL)
-			{
-				lefestOneOfSubTree = lefestOneOfSubTree->getLeft();
-			}//lefestOneOfSubTree found;
-			if (shouldMoveAtLeft) {
-				parentNode->setLeft(newNodeAtThatPosition);
-				if(lefestOneOfSubTree!=NULL)
-				lefestOneOfSubTree->setLeft(leftChildOfShouldMoved);
-			}
-			else
-			{
-				parentNode->setRight(newNodeAtThatPosition);
-				lefestOneOfSubTree->setLeft(leftChildOfShouldMoved);
-			}
 
-			delete shouldMoved;
-		}*/
+		/*//TreeNode*previous = NULL;
+		while (newNodeAtThatPosition->getRight() != NULL)
+		{
+			parentOfNewNode = newNodeAtThatPosition;
+			//previous = newNodeAtThatPosition;
+			newNodeAtThatPosition = newNodeAtThatPosition->getRight();
+		}//newNodeAtThatPosition already reaches the largest one that smaller than shouldMoved
+		//and its partents get
+		parentOfNewNode->setRight(NULL);
+		TreeNode *lefestOneOfSubTree = newNodeAtThatPosition;
+		while (lefestOneOfSubTree != NULL)
+		{
+			lefestOneOfSubTree = lefestOneOfSubTree->getLeft();
+		}//lefestOneOfSubTree found;
+		if (shouldMoveAtLeft) {
+			parentNode->setLeft(newNodeAtThatPosition);
+			if(lefestOneOfSubTree!=NULL)
+			lefestOneOfSubTree->setLeft(leftChildOfShouldMoved);
+		}
+		else
+		{
+			parentNode->setRight(newNodeAtThatPosition);
+			lefestOneOfSubTree->setLeft(leftChildOfShouldMoved);
+		}
+
+		delete shouldMoved;
+	}*/
 		else if ((shouldMoved->getLeft() == NULL) &&//CASE 3: shouldMoved only have right child
 			(shouldMoved->getRight() != NULL)) {
 			newNodeAtThatPosition = newNodeAtThatPosition->getRight();
@@ -168,42 +171,79 @@ bool TreeDB::remove(string name) {
 				parentNode->setRight(newNodeAtThatPosition);
 			delete shouldMoved;
 		}
-			/*TreeNode*parentOfNewNode = NULL;
-			while (newNodeAtThatPosition != NULL)
-			{
-				parentOfNewNode = newNodeAtThatPosition;
-				newNodeAtThatPosition = newNodeAtThatPosition->getRight();
-			}//newNodeAtThatPosition already reaches the largest one that smaller than shouldMoved
-			parentOfNewNode->setRight(NULL);
-			TreeNode *lefestOneOfSubTree = newNodeAtThatPosition;
-			while (lefestOneOfSubTree != NULL)
-			{
-				lefestOneOfSubTree = lefestOneOfSubTree->getLeft();
-			}//lefestOneOfSubTree found;
-			if (shouldMoveAtLeft) {
-				parentNode->setLeft(newNodeAtThatPosition);
-				lefestOneOfSubTree->setLeft(rightChildOfShouldMoved);
-			}
-			else
-			{
-				parentNode->setLeft(newNodeAtThatPosition);
-				lefestOneOfSubTree->setLeft(rightChildOfShouldMoved);
-			}
-			delete shouldMoved;
-		}*/
+		/*TreeNode*parentOfNewNode = NULL;
+		while (newNodeAtThatPosition != NULL)
+		{
+			parentOfNewNode = newNodeAtThatPosition;
+			newNodeAtThatPosition = newNodeAtThatPosition->getRight();
+		}//newNodeAtThatPosition already reaches the largest one that smaller than shouldMoved
+		parentOfNewNode->setRight(NULL);
+		TreeNode *lefestOneOfSubTree = newNodeAtThatPosition;
+		while (lefestOneOfSubTree != NULL)
+		{
+			lefestOneOfSubTree = lefestOneOfSubTree->getLeft();
+		}//lefestOneOfSubTree found;
+		if (shouldMoveAtLeft) {
+			parentNode->setLeft(newNodeAtThatPosition);
+			lefestOneOfSubTree->setLeft(rightChildOfShouldMoved);
+		}
+		else
+		{
+			parentNode->setLeft(newNodeAtThatPosition);
+			lefestOneOfSubTree->setLeft(rightChildOfShouldMoved);
+		}
+		delete shouldMoved;
+	}*/
 		else if ((shouldMoved->getLeft() != NULL) &&//CASE 4: shouldMoved have children on both sides
 			(shouldMoved->getRight() != NULL)) {
-            TreeNode*parentOfNewNode = newNodeAtThatPosition;
+			TreeNode*parentOfNewNode = newNodeAtThatPosition;
 			TreeNode*leftChildOfShouldMoved = newNodeAtThatPosition->getLeft();
 			TreeNode*rightChildOfShouldMoved = newNodeAtThatPosition->getRight();
-			newNodeAtThatPosition = newNodeAtThatPosition->getRight();
-			while (newNodeAtThatPosition->getRight() != NULL)
+			newNodeAtThatPosition = newNodeAtThatPosition->getLeft();
+			if (newNodeAtThatPosition->getRight() == NULL) {//leftChild of should move has no right child
+				if (shouldMoveAtLeft)
+					parentNode->setLeft(newNodeAtThatPosition);
+				else
+					parentNode->setRight(newNodeAtThatPosition);
+				newNodeAtThatPosition->setRight(rightChildOfShouldMoved);
+				delete shouldMoved;
+			}
+			else if (newNodeAtThatPosition->getRight() != NULL) {//leftChild of shouldMoved has right child;
+				while (newNodeAtThatPosition->getRight() != NULL) {//move to the rightest one
+					parentOfNewNode = newNodeAtThatPosition;
+					newNodeAtThatPosition = newNodeAtThatPosition->getRight();
+				}
+				if (newNodeAtThatPosition->getLeft() == NULL) {
+					if (shouldMoveAtLeft)
+						parentNode->setLeft(newNodeAtThatPosition);
+					else
+						parentNode->setRight(newNodeAtThatPosition);
+					newNodeAtThatPosition->setLeft(leftChildOfShouldMoved);
+					delete shouldMoved;
+				}
+				else if (newNodeAtThatPosition->getLeft() != NULL) {
+					TreeNode *leftsubtree = newNodeAtThatPosition->getLeft();
+					parentOfNewNode->setRight(leftsubtree);
+					if (shouldMoveAtLeft)
+						parentNode->setLeft(newNodeAtThatPosition);
+					else
+						parentNode->setRight(newNodeAtThatPosition);
+					newNodeAtThatPosition->setLeft(leftChildOfShouldMoved);
+				}
+
+
+
+			}
+			/*while (newNodeAtThatPosition->getRight() != NULL)
 			{
 				parentOfNewNode = newNodeAtThatPosition;
 				newNodeAtThatPosition = newNodeAtThatPosition->getRight();
 			}//newNodeAtThatPosition already reaches the largest one that smaller than shouldMoved
-			TreeNode*lefestOneOfSubTree2 = rightChildOfShouldMoved;
-			while (lefestOneOfSubTree2->getLeft()!=NULL)
+
+
+			if (leftChildOfShouldMoved->getRight() != NULL) {
+				TreeNode*lefestOneOfSubTree2 = leftChildOfShouldMoved->getRight();
+				while (lefestOneOfSubTree2->getLeft()!=NULL)
 			{
 				lefestOneOfSubTree2 = lefestOneOfSubTree2->getLeft();
 			}
@@ -220,11 +260,12 @@ bool TreeDB::remove(string name) {
 				lefestOneOfSubTree2->setLeft(leftChildOfShouldMoved);
 			}
 			delete shouldMoved;
-		}
-		
-		return true;
+		}*/
+
+			return true;
 
 		}
+	}
 
 else//could'd not find the specific entry with that name
 		return false;
