@@ -30,6 +30,7 @@ public:
 
 	// returns a pointer to the DBentry the TreeNode contains. 
 	DBentry* getEntry() const;
+
 };
 
 #endif 

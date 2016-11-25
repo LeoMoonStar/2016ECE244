@@ -27,5 +27,4 @@ DBentry *TreeNode::getEntry() const {
 }
 TreeNode::~TreeNode()
 {
-
 }
