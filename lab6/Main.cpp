@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Main.cpp
  * Author: vaughn
  *
@@ -19,7 +19,7 @@ using namespace std;
 /*********** Function declarations ***********/
 
 int parser (ShapeArray& shapeArray);
-bool parseNameAndColour (stringstream& linestream, string& name, 
+bool parseNameAndColour (stringstream& linestream, string& name,
           string& colour);
 void addTri(stringstream& linestream, ShapeArray& shapeArray);
 void addRect(stringstream& linestream, ShapeArray& shapeArray);
@@ -34,24 +34,24 @@ int main(int argc, char** argv) {
 
    ShapeArray shapeArray;
    int returnVal;
-   
+
    returnVal = parser(shapeArray);
    return returnVal;
 }
 
 
-// Parse commands and execute them, updating the state of the ShapeArray 
+// Parse commands and execute them, updating the state of the ShapeArray
 // object as necessary, until EOF.
 int parser (ShapeArray& shapeArray) {
    string str;
    cout << "> ";  // Prompt for input
-   
+
    while (getline(cin, str)) {   // While more input data, get one line at a time
       stringstream linestream(str);  // Build a stringstream from the line.
       string command;
-      
+
       linestream >> command;   // First word on the line is the command
-      
+
       if (!linestream.fail()) {
          // Call the appropriate routine to execute the command
          if (command == "tri") {
@@ -97,7 +97,7 @@ int parser (ShapeArray& shapeArray) {
       else {   // Extracting the command from the linestream failed.
          cout << "Error: invalid command\n";
       }
-      
+
       cout << "> ";   // Prompt for input
    }
    return 0;
@@ -107,21 +107,21 @@ int parser (ShapeArray& shapeArray) {
 // Parse a name and colour from the line stored in linestream. Return true
 // if successful, false if there is an input error.
 // Pass back the name and colCode by reference.
-bool parseNameAndColour (stringstream& linestream, string& name, 
+bool parseNameAndColour (stringstream& linestream, string& name,
           string& colour) {
-   
+
    linestream >> name;
    if (linestream.fail()) {
       cout << "Error: missing or invalid name\n";
       return false;
    }
-   
+
    linestream >> colour;
    if (linestream.fail()) {
       cout << "Error: missing or invalid colour\n";
       return false;
    }
-   
+
    return true;
 }
 
@@ -129,17 +129,17 @@ bool parseNameAndColour (stringstream& linestream, string& name,
 void addTri(stringstream& linestream, ShapeArray& shapeArray) {
    string name, colour;
    float xcoords[3], ycoords[3], xcen, ycen;
-   if (!parseNameAndColour (linestream, name, colour)) 
+   if (!parseNameAndColour (linestream, name, colour))
       return;
-   
-   linestream >> xcoords[0] >> ycoords[0] >> xcoords[1] >> ycoords[1] 
+
+   linestream >> xcoords[0] >> ycoords[0] >> xcoords[1] >> ycoords[1]
               >> xcoords[2] >> ycoords[2];
    if (linestream.fail ()) {
       cout << "Error: invalid coordinates\n";
       return;
    }
- 
-   // Want to store this shape as a center, and point offsets from the 
+
+   // Want to store this shape as a center, and point offsets from the
    // center.
    xcen = 0;
    ycen = 0;
@@ -149,12 +149,12 @@ void addTri(stringstream& linestream, ShapeArray& shapeArray) {
    }
    xcen /= 3;
    ycen /= 3;
-   
+
    for (int i = 0; i < 3; i++) {
       xcoords[i] -= xcen;
       ycoords[i] -= ycen;
    }
-      
+
    Triangle* tri = new Triangle (name, colour, xcen, ycen, xcoords, ycoords);
    shapeArray.addShape (tri);
    cout << "Success\n";
@@ -163,20 +163,20 @@ void addTri(stringstream& linestream, ShapeArray& shapeArray) {
 
 void addRect(stringstream& linestream, ShapeArray& shapeArray) {
     string name, colour;
-    float xcen, ycen, width, height;   
-    
+    float xcen, ycen, width, height;
+
     if (!parseNameAndColour (linestream, name, colour))
        return;
-    
+
     linestream >> xcen >> ycen >> width >> height;
     if (linestream.fail()) {
        cout << "Error: invalid center, width or height\n";
        return;
     }
-   
+
     Rectangle *rec=new Rectangle(name,colour,xcen,ycen,width,height);
     shapeArray.addshape(rec);
-    
+
    // Create a Rectangle and add it to the shape database.
    // Uncomment line below to add to shape database.
    // shapeArray.addShape (yourNewShape);
@@ -187,10 +187,10 @@ void addRect(stringstream& linestream, ShapeArray& shapeArray) {
 void addCirc(stringstream& linestream, ShapeArray& shapeArray) {
     string name, colour;
     float xcen, ycen, radius;
-    
+
     if (!parseNameAndColour (linestream, name, colour))
        return;
-    
+
     linestream >> xcen >> ycen >> radius;
     if (linestream.fail()) {
        cout << "Error: invalid center or radius\n";
@@ -212,13 +212,13 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
    const int maxVertices = 100;
    int nPoint = 0;
    t_point vertices[maxVertices];
-   
-   if (!parseNameAndColour (linestream, name, colour)) 
+
+   if (!parseNameAndColour (linestream, name, colour))
       return;
-   
+
    while (!linestream.fail()) {
       linestream >> vertices[nPoint].x >> vertices[nPoint].y;
-      if (!linestream.fail ()) 
+      if (!linestream.fail ())
          nPoint++;
    }
 
@@ -226,7 +226,7 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
       cout << "Error: Polygon must have at least 3 vertices.\n";
       return;
    }
-   
+
    xcen = 0;
    ycen = 0;
    for (int i = 0; i < nPoint; i++) {
@@ -236,13 +236,9 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
    xcen /= nPoint;
    ycen /= nPoint;
    
-   for (int i = 0; i < nPoint; i++) {
-      xcoords[i] -= xcen;
-      ycoords[i] -= ycen;
-   }
    Ploygon *plo= new Ploygon(name,colour,xcen,ycen,nPoint,vertices[100])
    // Now decide how you want to store these points, and make a
-   // Polygon. Uncomment line below to add the Polygon to the 
+   // Polygon. Uncomment line below to add the Polygon to the
    // shapeArray database.
    // shapeArray.addShape (poly);
    cout << "Success\n";
@@ -250,8 +246,8 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
 
 
 void addComposite(stringstream& linestream, ShapeArray& shapeArray) {
-   
-   // Bonus part of lab.  Need to write your own parsing code to 
+
+   // Bonus part of lab.  Need to write your own parsing code to
    // get all the composite information, then create a new Composite
    // object and add it to the shape database.
    // shapeArray.addShape (comp);
