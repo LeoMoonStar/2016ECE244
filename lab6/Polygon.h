@@ -1,37 +1,29 @@
-/* 
- * File:   Triangle.h
- * Author: vaughn
- *
- * Created on November 21, 2012, 7:36 PM
- */
 
-#ifndef TRIANGLE_H
-#define	TRIANGLE_H
+#ifndef PLOYGON_H
+#define	PLOYGON_H
 
 #include "Shape.h"
 #include "easygl.h"
 
-class Triangle : public Shape {
+class Polygon : public Shape {
 private:
    // t_point is a structure defined in easygl.h.  It has two members,
-   // .x and .y, storing a 2D point.  We store 3 points in relVertex; 
-   // each is the (x,y) offset of one triangle vertex from the shape 
-   // center.
-   t_point relVertex[3];   
-   
+   // .x and .y, storing a 2D point.
+  int nPoint;
+  t_point *vertices;
+
    // Private helper functions.
    t_point getVecBetweenPoints (t_point start, t_point end) const;
-   
+
 public:
-   Triangle (string _name, string _colour, float _xcen, float _ycen,
-            float _xcoords[3], float _ycoords[3]);
-   
+   Polygon (string _name, string _colour, float _xcen, float _ycen,int nPoint, t_point *vertices);
+
    // virtual keyword is optional in all the function declarations below, since
-   // the base class Shape already declared them virtual. But it is good 
+   // the base class Shape already declared them virtucal. But it is good
    // practice to repeat it again here, for clarity.
-   virtual ~Triangle();
-   
-   
+   virtual ~Polygon();
+
+
    virtual void print () const;
    virtual void scale (float scaleFac);
    virtual float computeArea () const;
@@ -40,4 +32,4 @@ public:
    virtual bool pointInside (float x, float y) const;
 };
 
-#endif	/* TRIANGLE_H */
+#endif	/*PLOGON_H */

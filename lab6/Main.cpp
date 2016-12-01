@@ -11,7 +11,7 @@
 #include "Triangle.h"
 #include "Circle.h"
 #include "Rectangle.h"
-#include "Ploygon.h"
+#include "Polygon.h"
 using namespace std;
 
 
@@ -175,7 +175,7 @@ void addRect(stringstream& linestream, ShapeArray& shapeArray) {
     }
 
     Rectangle *rec=new Rectangle(name,colour,xcen,ycen,width,height);
-    shapeArray.addshape(rec);
+    shapeArray.addShape(rec);
 
    // Create a Rectangle and add it to the shape database.
    // Uncomment line below to add to shape database.
@@ -201,7 +201,7 @@ void addCirc(stringstream& linestream, ShapeArray& shapeArray) {
    // make a Circle. Uncomment the line below to add to the shape database.
    // shapeArray.addShape (yourNewShape);
     Circle *cir=new Circle(name,colour,xcen,ycen,radius);
-    shapeArray.addshape(cir);
+    shapeArray.addShape(cir);
 
     cout << "Success\n";
 }
@@ -226,7 +226,7 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
       cout << "Error: Polygon must have at least 3 vertices.\n";
       return;
    }
-
+   float xcen,ycen;
    xcen = 0;
    ycen = 0;
    for (int i = 0; i < nPoint; i++) {
@@ -236,7 +236,9 @@ void addPoly(stringstream& linestream, ShapeArray& shapeArray) {
    xcen /= nPoint;
    ycen /= nPoint;
    
-   Ploygon *plo= new Ploygon(name,colour,xcen,ycen,nPoint,vertices[100])
+   
+   Polygon *plo= new Polygon(name,colour,xcen,ycen,nPoint,vertices);
+           shapeArray.addShape(plo);
    // Now decide how you want to store these points, and make a
    // Polygon. Uncomment line below to add the Polygon to the
    // shapeArray database.

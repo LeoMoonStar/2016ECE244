@@ -12,7 +12,7 @@ Rectangle::Rectangle (string _name, string _colour, float _xcen, float _ycen,
             float _width,float _height) : 
             Shape (_name, _colour, _xcen, _ycen) {
     
-    width=_wide;
+    width=_width;
     height=_height;
 }
 
@@ -24,8 +24,8 @@ Rectangle::~Rectangle () {
 
 void Rectangle::print () const {
    Shape::print();
-   cout << "Rectangle width: "<<width<<" ";
-   cout<<"height: "<<height;
+   cout << "rectangle width: "<<width<<" ";
+   cout<<"height: "<<height<<endl;
 }
 
 
@@ -59,7 +59,7 @@ void Rectangle::draw (easygl* window) const {
    // using the easygl::draw_polygon call.
    
    window->gl_setcolor(getColour());
-   window->gl_fillrect(getXcen()-0.5*width,getYcen()-0.5*height,getXcen+0.5*width,getYcen()-0.5*height);
+   window->gl_fillrect(getXcen()-0.5*width,getYcen()-0.5*height,getXcen()+0.5*width,getYcen()+0.5*height);
 }
 
 
